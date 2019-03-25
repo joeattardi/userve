@@ -10,6 +10,7 @@ const morgan = require('morgan');
 const { version } = require('../package.json');
 const args = require('./args');
 
+const { sendFile } = require('./handlers/file');
 const { showIndex } = require('./handlers/index');
 const { showNotFound } = require('./handlers/notFound');
 
@@ -27,15 +28,19 @@ const logger = args.logFormat !== 'none' ? morgan(args.logFormat) : (req, res, c
 
 async function requestHandler(request, response) {
   logger(request, response, async err => {
-    const resourcePath = resolve(args.path, request.url.substring(1));
+    const resourcePath = request.url.startsWith('/__userve') ? getInternalPath(request.url) : resolve(args.path, request.url.substring(1));
 
     try {
+      if (request.url === '/__userve') {
+        throw { code: 'ENOENT' };
+      }
+      
       const fileStat = await fs.stat(resourcePath);
   
       if (fileStat.isDirectory()) {
         showIndex(resourcePath, request, response);
       } else {
-        response.end('Hello world!');
+        sendFile(resourcePath, request, response);
       }
     } catch (err) {
       if (err.code === 'ENOENT') {
@@ -54,3 +59,8 @@ server.listen(args.port, err => {
 
   process.stdout.write(`Server listening on port ${chalk.bold(args.port)}\n\n`);
 });
+
+function getInternalPath(url) {
+  const internalPath = url.split('/').slice(2);
+  return resolve(__dirname, 'static', internalPath.join('/'));
+}
