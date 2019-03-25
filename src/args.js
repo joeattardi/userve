@@ -5,6 +5,12 @@ const argv = require('yargs')
     describe: 'The port number to listen on',
     default: 8080
   })
+  .option('log-format', {
+    alias: 'l',
+    describe: 'The log format to use',
+    choices: ['none', 'combined', 'common', 'dev', 'short', 'tiny'],
+    default: 'common'
+  })
   .argv;
 
 const arguments = {};
@@ -17,5 +23,7 @@ if (isNaN(port)) {
   process.exit(1);
 }
 arguments.port = port;
+
+arguments.logFormat = argv.logFormat;
 
 module.exports = arguments;
