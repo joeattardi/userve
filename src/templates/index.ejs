@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Index</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <style>
+      .fas {
+        width: 1em;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Index</h1>
+
+    <% if (upPath) { %><a href="/<%= upPath %>">Go Back</a><% } %>
+
+    <% for (let file of files) { %>
+      <div>
+        <% if (file.isDirectory()) { %>
+          <i class="fas fa-folder"></i>
+        <% } else { %>
+          <i class="fas fa-file"></i>
+        <% } %>
+        <a href="<%= basePath %>/<%= file.name %>"><%= file.name %></a>
+      </div>
+    <% } %>
+  </body>
+</html>

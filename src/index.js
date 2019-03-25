@@ -4,9 +4,13 @@ const http = require('http');
 const { resolve } = require('path');
 
 const chalk = require('chalk');
+const fs = require('fs-extra');
 
 const { version } = require('../package.json');
 const args = require('./args');
+
+const { showIndex } = require('./handlers/index');
+const { showNotFound } = require('./handlers/notFound');
 
 process.stdout.write(chalk.bold(`μserve v${version}\n`));
 process.stdout.write(`Serving directory: ${chalk.bold(resolve(args.path))}\n`);
@@ -17,8 +21,22 @@ process.on('SIGINT', () => {
   process.exit(0);
 });
 
-function requestHandler(request, response) {
-  response.end('Hello world!');
+async function requestHandler(request, response) {
+  const resourcePath = resolve('.', request.url.substring(1));
+
+  try {
+    const fileStat = await fs.stat(resourcePath);
+
+    if (fileStat.isDirectory()) {
+      return showIndex(resourcePath, request, response);
+    }
+
+    response.end('Hello world!');
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      return showNotFound(request, response);
+    }
+  }
 }
 
 const server = http.createServer(requestHandler);
