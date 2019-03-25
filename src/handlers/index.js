@@ -27,6 +27,12 @@ exports.showIndex = async function showIndex(resourcePath, request, response) {
     upPath = path.join(...pathComponents.slice(0, pathComponents.length - 1));
   }
 
-  return response.end(ejs.render(templateSource, { basePath, upPath, files }));
+  response.setHeader('Content-Type', 'text/html; charset=utf-8');
+  return response.end(ejs.render(templateSource, { 
+    url: request.url,
+    basePath,
+    upPath,
+    files
+  }));
 };
 
