@@ -22,7 +22,7 @@ process.on('SIGINT', () => {
 });
 
 async function requestHandler(request, response) {
-  const resourcePath = resolve('.', request.url.substring(1));
+  const resourcePath = resolve(args.path, request.url.substring(1));
 
   try {
     const fileStat = await fs.stat(resourcePath);
