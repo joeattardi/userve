@@ -15,13 +15,19 @@
     <h1>Index of <%= url %></h1>
     <hr>
     
-    <% if (upPath) { %><a href="/<%= upPath %>">Go Back</a><% } %>
+    <% if (upPath) { %>
+      <div class="index-entry">
+        <a href="/<%= upPath %>"><i class="fas fa-level-up-alt fa-fw"></i> Parent Directory</a>
+      </div>
+    <% } %>
 
     <% for (let file of files) { %>
       <div class="index-entry">
         <a href="<%= basePath %>/<%= file.name %>">
           <% if (file.isDirectory()) { %>
             <i class="fas fa-fw fa-folder"></i>
+          <% } else if (icons[extension(file.name)]) { %>
+            <i class="<%= icons[extension(file.name)] %> fa-fw"></i>
           <% } else { %>
             <i class="fas fa-fw fa-file"></i>
           <% } %>

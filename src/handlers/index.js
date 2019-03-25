@@ -32,7 +32,33 @@ exports.showIndex = async function showIndex(resourcePath, request, response) {
     url: request.url,
     basePath,
     upPath,
-    files
+    files,
+    icons,
+    extension
   }));
 };
 
+function extension(filename) {
+  return filename.split('.').slice(-1);
+}
+
+const icons = {
+  'css': 'fab fa-css3',
+  'Dockerfile': 'fab fa-docker',
+  'gif': 'far fa-image',
+  'gitignore': 'fab fa-git',
+  'html': 'fab fa-html5',
+  'htm': 'fab fa-html5',
+  'ico': 'far fa-image',
+  'java': 'fab fa-java',
+  'jpg': 'far fa-image',
+  'js': 'fab fa-js',
+  'json': 'fab fa-js',
+  'pdf': 'fas fa-file-pdf',
+  'php': 'fab fa-php',
+  'png': 'far fa-image',
+  'py': 'fab fa-python',
+  'sass': 'fab fa-sass',
+  'scss': 'fab fa-sass',
+  'svg': 'far fa-image'
+};
